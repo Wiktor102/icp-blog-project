@@ -13,7 +13,12 @@ fn get_articles() -> Vec<Article> {
 }
 
 #[ic_cdk::update]
-fn add_article(title: String, author: String, tags: Vec<String>, content: String) -> Result<String, String> {
+fn add_article(
+    title: String,
+    author: String,
+    tags: Vec<String>,
+    content: String,
+) -> Result<Article, String> {
     if title.len() == 0 {
         return Err("Title cannot be empty".to_string());
     }
@@ -24,5 +29,13 @@ fn add_article(title: String, author: String, tags: Vec<String>, content: String
 
     let new_article = Article::new(title, author, tags, content);
     ARTICLES.with(|articles| articles.borrow_mut().push(new_article));
-    Ok("OK".to_string())
+
+    let last_article = ARTICLES.with(|articles| {
+        articles
+            .borrow()
+            .last()
+            .expect("Vec should not be empty")
+            .clone()
+    });
+    return Ok(last_article);
 }

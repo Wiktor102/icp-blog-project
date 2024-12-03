@@ -1,5 +1,5 @@
 type Result = variant {
-    Ok: text;
+    Ok: Article;
     Err: text;
 };
 
