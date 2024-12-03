@@ -27,6 +27,18 @@ fn add_article(
         return Err("Title is too long".to_string());
     }
 
+    if author.len() == 0 {
+        return Err("Author cannot be empty".to_string());
+    }
+
+    if content.len() == 0 {
+        return Err("Content cannot be empty".to_string());
+    }
+
+    if tags.len() > 3 {
+        return Err("Too many tags".to_string());
+    }
+
     let new_article = Article::new(title, author, tags, content);
     ARTICLES.with(|articles| articles.borrow_mut().push(new_article));
 
