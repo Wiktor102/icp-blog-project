@@ -5,7 +5,7 @@ type Comment = record {
 
 type Article = record {
     title: text;
-    date: nat32;
+    date: nat64;
     author: text;
     tags: vec text;
     content: text;
@@ -14,5 +14,5 @@ type Article = record {
 
 service : {
     "get_articles": () -> (vec Article) query;
-    "add_article": (text, nat32, text, vec text, text) -> ();
+    "add_article": (text, text, vec text, text) -> ();
 };

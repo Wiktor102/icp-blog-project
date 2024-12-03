@@ -9,7 +9,7 @@ struct Comment {
 #[derive(Clone, CandidType)]
 pub struct Article {
     title: String,
-    date: u32,
+    date: u64,
     author: String,
     tags: Vec<String>,
     content: String,
@@ -17,10 +17,10 @@ pub struct Article {
 }
 
 impl Article {
-    pub fn new(title: String, date: u32, author: String, tags: Vec<String>, content: String) -> Self {
+    pub fn new(title: String, author: String, tags: Vec<String>, content: String) -> Self {
         Self {
             title,
-            date,
+            date: ic_cdk::api::time(),
             author,
             tags,
             content,

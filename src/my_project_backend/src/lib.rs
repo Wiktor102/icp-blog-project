@@ -13,7 +13,7 @@ fn get_articles() -> Vec<Article> {
 }
 
 #[ic_cdk::update]
-fn add_article(title: String, date: u32, author: String, tags: Vec<String>, content: String) {
-    let new_article = Article::new(title, date, author, tags, content);
+fn add_article(title: String, author: String, tags: Vec<String>, content: String) {
+    let new_article = Article::new(title, author, tags, content);
     ARTICLES.with(|articles| articles.borrow_mut().push(new_article));
 }
