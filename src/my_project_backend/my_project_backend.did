@@ -1,3 +1,18 @@
+type Comment = record {
+    author: text;
+    content: text;
+};
+
+type Article = record {
+    title: text;
+    date: nat32;
+    author: text;
+    tags: vec text;
+    content: text;
+    comments: vec Comment;
+};
+
 service : {
-    "greet": (text) -> (text) query;
-}
+    "get_articles": () -> (vec Article) query;
+    "add_article": (text, nat32, text, vec text, text) -> ();
+};
