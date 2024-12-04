@@ -1,4 +1,6 @@
-#[derive(Clone)]
+use candid::{CandidType, Deserialize};
+
+#[derive(CandidType, Clone, Deserialize)]
 pub struct Config {
     pub max_tags_count: u8,
     pub max_title_length: u8,

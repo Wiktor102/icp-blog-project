@@ -49,6 +49,10 @@ fn add_article(
         return Err("Too many tags".to_string());
     }
 
+    if tags.iter().any(|tag| !config.tags.contains(tag)) {
+        return Err("Invalid tag".to_string());
+    }
+
     let new_article = Article::new(title, author, tags, content);
     ARTICLES.with(|articles| articles.borrow_mut().push(new_article));
 
@@ -60,4 +64,14 @@ fn add_article(
             .clone()
     });
     return Ok(last_article);
+}
+
+#[ic_cdk::query]
+fn get_config() -> Config {
+    CONFIG.with(|config| config.borrow().clone())
+}
+
+#[ic_cdk::update]
+fn update_config(new_config: Config) {
+    CONFIG.with(|config| *config.borrow_mut() = new_config);
 }

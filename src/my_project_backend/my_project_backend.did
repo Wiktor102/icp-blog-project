@@ -17,7 +17,16 @@ type Article = record {
     comments: vec Comment;
 };
 
+type Config = record {
+    max_tags_count: nat8;
+    max_title_length: nat8;
+    max_content_length: nat16;
+    tags: vec text;
+}
+
 service : {
     "get_articles": () -> (vec Article) query;
     "add_article": (text, text, vec text, text) -> (Result);
+    "get_config": () -> (Config);
+    "update_config": (Config) -> ();
 };
