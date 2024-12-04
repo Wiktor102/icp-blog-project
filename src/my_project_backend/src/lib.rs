@@ -3,8 +3,12 @@ use std::cell::RefCell;
 mod article;
 use article::Article;
 
+mod config;
+use config::Config;
+
 thread_local! {
     static ARTICLES: RefCell<Vec<Article>> = RefCell::new(Vec::new());
+    static CONFIG: RefCell<Config> = RefCell::new(Config::new());
 }
 
 #[ic_cdk::query]
@@ -19,11 +23,13 @@ fn add_article(
     tags: Vec<String>,
     content: String,
 ) -> Result<Article, String> {
+    let config = CONFIG.with(|config| config.borrow().clone());
+
     if title.len() == 0 {
         return Err("Title cannot be empty".to_string());
     }
 
-    if title.len() >= 64 {
+    if title.len() >= config.max_title_length as usize {
         return Err("Title is too long".to_string());
     }
 
@@ -35,7 +41,11 @@ fn add_article(
         return Err("Content cannot be empty".to_string());
     }
 
-    if tags.len() > 3 {
+    if content.len() >= config.max_content_length as usize {
+        return Err("Content is too long".to_string());
+    }
+
+    if tags.len() > config.max_tags_count as usize {
         return Err("Too many tags".to_string());
     }
 
