@@ -26,7 +26,12 @@
 			formData.get("tags").split(","),
 			formData.get("content")
 		);
-        console.log(response.Ok);
+
+        if (response.Err) {
+            alert(response.Err);
+            return;
+        }
+
 		articles.value = [...articles.value, makeArticle(response.Ok)];
 	}
 
