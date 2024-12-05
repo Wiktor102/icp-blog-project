@@ -3,6 +3,9 @@
 	import { my_project_backend } from "declarations/my_project_backend/index";
 	let articles = ref([]);
 
+    let currentTag = ref("");
+    let addedTags = ref([]);
+
 	function makeArticle(article) {
 		return {
 			...article,
@@ -16,6 +19,7 @@
 
 	async function handleSubmit(e) {
 		e.preventDefault();
+
 		const target = e.target;
 		const form = target.closest("form");
 		const formData = new FormData(form);
@@ -23,7 +27,7 @@
 		const response = await my_project_backend.add_article(
 			formData.get("title"),
 			formData.get("author"),
-			formData.get("tags").split(","),
+			addedTags,
 			formData.get("content")
 		);
 
@@ -34,6 +38,17 @@
 
 		articles.value = [...articles.value, makeArticle(response.Ok)];
 	}
+
+    function handleTagChange (e) {
+        if (e.key !== ",") return;
+        e.preventDefault && e.preventDefault();
+        addedTags.value =  [...addedTags.value, ...e.target.value.split(",")];
+        currentTag.value = "";
+    }
+
+    function deleteTag (index) {
+        addedTags.value = addedTags.value.filter((_, i) => i !== index);
+    }
 
 	getBlogs();
 </script>
@@ -53,11 +68,15 @@
 				<label for="content">Article text:</label>
 				<textarea name="content" id="content" cols="30" rows="10"></textarea>
 			</div>
-			<div class="group" id="tags-group">
-				<label for="tags">Tags</label>
-				<input id="tags" name="tags" type="text" />
-			</div>
+            <div id="tags">
+                <label for="tags">Tags</label>
+                <input id="tags" name="tags" type="text" :value=currentTag @keydown="handleTagChange" />
+                <ul id="selected-tags">
+                    <li v-for="(tag, index) in addedTags" :key="index" class="tag">{{ tag }} <button @click="() => deleteTag(index)">x</button></li>
+                </ul>
+            </div>
 			<button type="submit">Add</button>
 		</form>
+        {{ articles }}
 	</main>
 </template>
