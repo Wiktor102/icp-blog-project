@@ -59,6 +59,5 @@
 			</div>
 			<button type="submit">Add</button>
 		</form>
-		<span>{{ articles }}</span>
 	</main>
 </template>
